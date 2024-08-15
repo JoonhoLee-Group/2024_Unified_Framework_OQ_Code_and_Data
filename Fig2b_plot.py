@@ -17,7 +17,7 @@ from sympy.tensor.array.expressions import ArraySymbol
 from sympy.abc import i, j, k
 import h5py
 import matplotlib.pyplot as plt
-from pyeom.inverse.inverse import *
+from engine.inverse.inverse import *
 plt.rc("font", family="serif")
 plt.rc("xtick")
 
@@ -145,7 +145,7 @@ from sympy.tensor.array.expressions import ArraySymbol
 from sympy.abc import i, j, k
 import h5py
 import matplotlib.pyplot as plt
-from pyeom.inverse.inverse import *
+from engine.inverse.inverse import *
 filename = f'Data/Fig 2 Data/heompaper10.115.0/heompaper10.115.0/tmax15.0beta5alpha0.5s1initial1.h5'
 
 h5 = h5py.File(filename,'r')

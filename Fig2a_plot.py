@@ -27,7 +27,7 @@ plt.rc("xtick")
 
 
 plt.rc("ytick")
-fig = plt.figure()  # width=8 inches, height=6 inches
+fig = plt.figure(  )  # width=8 inches, height=6 inches
 
 ax = fig.add_subplot(1, 1, 1)
 N=500
@@ -38,10 +38,10 @@ Idval=np.array([[1,0],[0,1]],dtype = 'complex')
 Hs=np.array([[0,1],[1,0]],dtype = 'complex')
 delt=wantdelt
 G=scln.expm(np.kron(1j*Hs*delt/2,Idval)+np.kron(Idval,(-1j*Hs*delt/2)))
-filename = f'Data/Fig 2 Data/jobgqme0.50.5/dyn0.5beta5delt0.1ohmicity0.5.h5'
+filename = f'Data/Fig 2 Data/jobgqme0.11.0/dyn0.1beta5delt0.1ohmicity1.0.h5'
 
 h5 = h5py.File(filename,'r')
-kmax=13
+kmax=14
 #MK=np.zeros((4,4,kmax+1),dtype='complex')
 M = h5["M"]  # VSTOXX futures data
 A = np.array(h5["10AT"])
@@ -57,22 +57,23 @@ for k in range(2,kmax+1):
         tempM += np.matmul(M[:, :, j],UU[:, :, k - j])
     (UU[:,:,(k)])=M[:,:,(k)]+tempM
 for i in range(1,kmax+1):
-    #UU[:,:,i]=np.matmul(G,np.matmul(UU[:,:,i],G))
+    UU[:,:,i]=np.matmul(G,np.matmul(UU[:,:,i],G))
     MMM[:,:,i]=M[:,:,i]
 MK=KfromU(UU,kmax)
 #ax.plot(np.arange(0,14)*wantdelt,MK[1,2,:],color="k", ls="solid",label="Dyck/INFPI $\mathcal{K}_{12}^N$")
 #ax.plot(np.arange(0,14)*wantdelt,MK[0,0,:],color=(0.6,0.6,0.6), ls="solid",label="Dyck/INFPI $\mathcal{K}_{00}^N$")
 #ax.plot(np.arange(0,14)*wantdelt,MK[0,3,:],color=(0.2,0.2,0.2), ls="solid",label="Dyck/INFPI $\mathcal{K}_{03}^N$")
 for i in range(kmax+1):
-    Mnorm[i]=onorm(MK[:,:,i]/(delt**2))
+    Mnorm[i]=onorm(M[:,:,i]/(delt**2))
 #ax.plot(t,A[0,:],color="k")
-ax.semilogy(np.arange(2,kmax+1)*wantdelt,Mnorm[2:],color="k", ls="none",marker='.',label=r'$\|\mathcal{K}_{N}\|$',markersize=7)
+ax.semilogy(np.arange(2,kmax+1)*wantdelt,Mnorm[2:],color="k", ls="none",marker='.',markersize=7)
 
 h5.close()
 
 ax.set_facecolor((0.9,1,1))
 plt.xlabel("Time",fontsize=15)
 #ax.set_ylabel(r"$\sigma_z$")
+#ax.set_ylim([-0.2,1])
 ax.set_ylim([0.0001,15])
 ax.set_xlim([0,4])
 
@@ -150,25 +151,25 @@ from sympy.abc import i, j, k
 import h5py
 import matplotlib.pyplot as plt
 from engine.inverse.inverse import *
-filename = f'Data/Fig 2 Data/ttt/ttt/heomdynamicssubohmicpapertrueyes0.110.0/tmax10.0beta5alpha0.5s0.5initial1.h5'
+filename = f'Data/Fig 2 Data/heompaper10.115.0/heompaper10.115.0/tmax15.0beta5alpha0.1s1initial1.h5'
 
 h5 = h5py.File(filename,'r')
 #kmax=14
 A1 = np.transpose(h5["rho"])
 
-filename = f'Data/Fig 2 Data/ttt/ttt/heomdynamicssubohmicpapertrueyes0.110.0/tmax10.0beta5alpha0.5s0.5initial2.h5'
+filename = f'Data/Fig 2 Data/heompaper10.115.0/heompaper10.115.0/tmax15.0beta5alpha0.1s1initial2.h5'
 
 h5 = h5py.File(filename,'r')
 #kmax=14
 A2 = np.transpose(h5["rho"])
 
-filename = f'Data/Fig 2 Data/ttt/ttt/heomdynamicssubohmicpapertrueyes0.110.0/tmax10.0beta5alpha0.5s0.5initial3.h5'
+filename = f'Data/Fig 2 Data/heompaper10.115.0/heompaper10.115.0/tmax15.0beta5alpha0.1s1initial3.h5'
 
 h5 = h5py.File(filename,'r')
 #kmax=14
 A3 = np.transpose(h5["rho"])
 
-filename = 'Data/Fig 2 Data/ttt/ttt/heomdynamicssubohmicpapertrueyes0.110.0/tmax10.0beta5alpha0.5s0.5initial4.h5'
+filename = 'Data/Fig 2 Data/heompaper10.115.0/heompaper10.115.0/tmax15.0beta5alpha0.1s1initial4.h5'
 
 h5 = h5py.File(filename,'r')
 #kmax=14
@@ -178,7 +179,7 @@ Uex=UfromA(A1,A2,A3,A4)
 A5=A1.copy()
 for i in range(1,len(A1)):  
     A5[:,i]=np.matmul(Uex[:,:,i],[1,0,0,0])
-mmax=99
+mmax=150
 Mex=KfromU(Uex,mmax)
 
 t=np.arange(0,0.1*(mmax+1),0.1)
@@ -186,9 +187,11 @@ ddelt=0.1
 Mnormex=np.zeros((mmax+1),dtype = 'complex')
 for i in range(mmax+1):
     Mnormex[i]=onorm(Mex[:,:,i]/(ddelt**2))
-ax.plot(t[2:],Mnormex[2:],color=(0,0,0),alpha=1, ls="solid")
+ax.plot(t[2:],Mnormex[2:],color=(0,0,0),alpha=1, ls="solid",label="HEOM $\mathcal{K}_{12}^N$")
 plt.xticks(fontsize=15)
+
 plt.yticks(fontsize=15)
+#plt.savefig("plots/K051HEOM.png",dpi=1000)
 #plt.plot(t[0:500],A1[0,:500])
 
 
@@ -229,14 +232,14 @@ from sympy.tensor.array.expressions import ArraySymbol
 from sympy.abc import i, j, k
 mpl.rcParams.update(mpl.rcParamsDefault)
 beta=5
-kmax=450
+kmax=40
 N=500
 wantdelt=0.1
-kondo=0.5
+kondo=0.1
 ga=kondo* np.pi / 2
-No=10000
+No=20000
 hbar=1
-om=np.linspace(-150,150,No)
+om=np.linspace(-100,100,No)
 yy1=np.zeros(No,dtype = "complex")
 yy2=np.zeros(No,dtype = "complex")
 tarr = np.linspace(0,wantdelt*(N-1),num=N)
@@ -244,7 +247,7 @@ delt=(tarr[1]-tarr[0])
 Hs=np.array([[0,1],[1,0]],dtype = "complex")
 wcut = 7.5
 JJ=om.copy()
-ohmicity=0.5
+ohmicity=1
 wc=wcut
 def J(xs):  # Spectral density (Ohmic bath with exponential cutoff)
     output = np.zeros_like(xs)
@@ -349,24 +352,18 @@ for i in range(kmax):
 #plt.plot(np.log(abs(etakkd[1:])))
 #plt.plot(2.5*1/x**0.5
 #ax.set_ylabel(r'$\|\mathcal{K}_{N \Delta t}\|_O$', color='k',fontsize=15)
-
-ax.semilogy(range(2,kmax+1)*delt,x[1:], color='#5E091A',label=r'$\|\tilde{I}_N\|$')
+#ax2 = ax.twinx()
+ax.semilogy(range(2,kmax+1)*delt,x[1:], color='#5E091A')
 ax.semilogy(range(2,14+1)*delt,x[1:14], color='#5E091A', ls="none",marker='x',markersize=7)
-#ax.set_ylabel(, color='#5E091A',fontsize=15)
+#ax.set_ylabel(r'$\|\tilde{I}\|_O$', color='#5E091A',fontsize=15)
 ax.tick_params('y', color='#5E091A')
 #fnorm=np.zeros((kmax+1),dtype="complex")
 #matrixone=np.ones((4),dtype="complex")
-
+#plt.legend()
 
 plt.xticks(fontsize=15)
 plt.yticks(fontsize=15)
-
-
-
-ax.set_ylim([0.0001,15])
-
-
-filename="Data/Fig 2 Data/crestcrest6/dyn0.7853981633974483ohmicity0.5.h5"
+filename="Data/Fig 2 Data/crestcrest6/dyn0.15707963267948966ohmicity1.0.h5"
 
 h5 = h5py.File(filename,'r')
 #kmax=14
@@ -379,14 +376,14 @@ bbb=np.zeros((4,4,18),dtype='complex')
 for i in range(17):
     
     bbb[:,:,i]=sett[:,:,i]
+    #aaa[i]=onorm(bbb[:,:,i]-MMM[:,:,i+1]/0.01)
     nnnn[i]=nnn[i]
 h5.close()
+print(Mex[2,1,1:8]/0.01)
+print(bbb[2,1,:7])
 
 plt.plot(range(2,18)*delt,(nnnn[1:]),alpha=0.9,color='black', ls="dashed",label=r'$\|\mathcal{K}_{N,crest}-\mathcal{K}_{N}\|$')
-#plt.plot(range(2,15)*delt,(aaa[0:-4]),alpha=0.9,color='black', ls="dashed",label=r'$\|\mathcal{K}_{N,crest}-\mathcal{K}_{N}\|$')
-h5.close()
-
-plt.legend(fontsize=15)
-plt.savefig(f"Fig1c.eps",format='eps',bbox_inches="tight")
+#plt.plot(range(2,16)*delt,(aaa[0:-3]),alpha=0.9,color='black', ls="dashed",label=r'$\|\mathcal{K}_{N,crest}-\mathcal{K}_{N}\|$')
+plt.savefig(f"Fig1a.eps",format='eps',bbox_inches="tight")
 
 plt.show()

@@ -15,6 +15,8 @@ import matplotlib.pyplot as plt
 from scipy.interpolate import interp1d
 ##This code is skipping the rho->U->K because they are exact in principle
 ###Set kondo and ohmicity below to plot the respective plots
+####Modify this code (and the from data code) accordingly to produce Figs. S3 and S6
+
 
 kkmax=15
 N=500
