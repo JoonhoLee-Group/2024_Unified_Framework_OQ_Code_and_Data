@@ -1,5 +1,1 @@
-# pyeom
-Python-based real-time quantum dynamics methods
-
-
-call Qua.py [kmax]
+# Codes and data accompanying Unified Framework of Open Quantum Dynamics with Memory
